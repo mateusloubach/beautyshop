@@ -24,6 +24,10 @@
 .DS_Store
 *.pem
 
+# markdown
+quick_start.md
+coding_standards.md
+
 # debug
 npm-debug.log*
 yarn-debug.log*
