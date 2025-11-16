@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { encodeSans, lavishlyYours } from "@/lib/fonts";
 import "./globals.css";
+import Header from "@/components/shared/Header";
+import Footer from "@/components/shared/Footer";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,10 +16,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${encodeSans.variable} ${lavishlyYours.variable} antialiased`}
-      >
-        {children}
+      <body className={`${encodeSans.variable} ${lavishlyYours.variable} antialiased`}>
+        <div className="min-h-screen flex flex-col">
+          <Header />
+          <main className={`${encodeSans.variable} ${lavishlyYours.variable} antialiased`}>
+            {children}
+          </main>
+          <Footer />
+        </div>
       </body>
     </html>
   );

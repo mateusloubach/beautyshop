@@ -1,7 +1,11 @@
-
+import CardCarousel from "./(main)/_components/sections/CarouselAlt";
+import Hero from "./(main)/_components/sections/Hero";
 
 export default function Home() {
   return (
-    <h1> hello world </h1>
+    <>
+      <Hero />
+      <CardCarousel />
+    </>
   );
 }
