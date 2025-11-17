@@ -15,10 +15,15 @@ const Example = () => {
 
 const SwapColumnFeatures = () => {
   const [featureInView, setFeatureInView] = useState<FeatureType>(features[0]);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <section className="relative mx-auto max-w-7xl">
-      <SlidingFeatureDisplay featureInView={featureInView} />
+      {mounted && <SlidingFeatureDisplay featureInView={featureInView} />}
 
       {/* Offsets the height of SlidingFeatureDisplay so that it renders on top of Content to start */}
       <div className="-mt-[100vh] hidden md:block" />
@@ -71,15 +76,21 @@ const Content = ({
   featureInView: FeatureType;
 }) => {
   const ref = useRef(null);
+  const [mounted, setMounted] = useState(false);
   const isInView = useInView(ref, {
     margin: "-150px",
+    once: false,
   });
 
   useEffect(() => {
-    if (isInView) {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted && isInView) {
       setFeatureInView(featureInView);
     }
-  }, [isInView]);
+  }, [isInView, mounted, setFeatureInView, featureInView]);
 
   return (
     <section
@@ -94,7 +105,9 @@ const Content = ({
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.5, ease: "easeInOut" }}
+          suppressHydrationWarning
         >
           <span className="rounded-full bg-[#7A6458] px-2 py-1.5 text-xs font-medium text-[#F9F7F5]">
             {featureInView.callout}
@@ -105,8 +118,10 @@ const Content = ({
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.5, ease: "easeInOut" }}
           className="mt-8 block md:hidden"
+          suppressHydrationWarning
         >
           <ExampleFeature featureInView={featureInView} />
         </motion.div>

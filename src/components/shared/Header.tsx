@@ -23,6 +23,7 @@ const Header = () => {
 
   // On home: transparent header until scroll.
   // On other routes: always use the "scrolled" (solid) style by default.
+  // For non-home pages, always show solid header to prevent hydration mismatch
   const showSolidHeader = !isHome || isScrolled;
   const useLightHeaderText = isHome && !isScrolled;
 
@@ -50,24 +51,40 @@ const Header = () => {
   }, [isMenuOpen]);
 
   // Detect scroll position to toggle header blur/background
+  // Only check scroll after component mounts to prevent hydration mismatch
   useEffect(() => {
-    const onScroll = () => {
-      setIsScrolled(window.scrollY > 0);
+    // Use requestAnimationFrame to ensure this runs after initial render
+    const checkScroll = () => {
+      if (typeof window !== 'undefined') {
+        setIsScrolled(window.scrollY > 0);
+      }
     };
-    onScroll();
+    
+    // Delay initial check to avoid hydration mismatch
+    const timeoutId = setTimeout(checkScroll, 0);
+    
+    const onScroll = () => {
+      if (typeof window !== 'undefined') {
+        setIsScrolled(window.scrollY > 0);
+      }
+    };
+    
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   const navItems = [
     // { label: "INÍCIO", href: "/" },
     { label: "SERVIÇOS", href: "/services" },
     { label: "SOBRE NÓS", href: "/about" },
-    { label: "GALERIA", href: "#blog" },
+    { label: "GALERIA", href: "/galeria" },
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50">
+    <header className="fixed top-0 left-0 right-0 z-50" suppressHydrationWarning>
       {/* Full-width effect layer spanning edge-to-edge */}
       <div
         className={cn(
@@ -82,7 +99,7 @@ const Header = () => {
           <Link
             href="/"
             className={cn(
-              "text-3xl font-bold tracking-tight transition-colors duration-300",
+              "text-3xl font-bold tracking-tight transition-colors duration-300 font-syne",
               useLightHeaderText ? "text-white" : "text-[#4a3b39]"
             )}
           >
@@ -98,7 +115,7 @@ const Header = () => {
                     <Link
                       href={item.href}
                       className={cn(
-                        "text-sm font-medium tracking-wide transition-colors px-4 py-2 rounded-md",
+                        "text-lg! font-medium tracking-wide transition-colors px-4 py-2 rounded-md font-syne",
                         useLightHeaderText
                           ? "text-white hover:text-foregroundText"
                           : "text-[#4a3b39] hover:text-foregroundText"
@@ -114,14 +131,14 @@ const Header = () => {
 
           <Button
             className={cn(
-              "hidden md:inline-flex bg-background/15 hover:bg-background/75 backdrop-blur-md shadow-md transition-colors duration-300",
+              "hidden md:inline-flex bg-foreground backdrop-blur-md shadow-md transition-colors duration-300 font-syne",
               useLightHeaderText
-                ? "text-white hover:text-foregroundText/80"
-                : "text-[#4a3b39] hover:text-foregroundText"
+                ? "text-white"
+                : "text-white"
             )}
             size="lg"
           >
-            <Link href={isHome ? "#contact" : "/"}>
+            <Link href={isHome ? "#contact" : "/"} className="font-syne">
               {/* {isHome ? "Faça sua reserva agora" : "Voltar ao início"} */}
               Faça sua reserva agora
             </Link>
@@ -145,7 +162,7 @@ const Header = () => {
         <nav
           ref={menuRef}
           className={cn(
-            "md:hidden absolute top-full right-0 mt-2 py-7 backdrop-blur-md p-4 border border-white/5 rounded-2xl transition-all duration-300 ease-in-out max-w-sm w-3/4 mx-1 shadow-2xl",
+            "md:hidden absolute top-full right-0 mt-2 py-7 backdrop-blur-md p-4 border border-white/5 rounded-2xl transition-all duration-300 ease-in-out max-w-sm w-4/6 mx-1 shadow-2xl",
             isMenuOpen
               ? "opacity-100 scale-100"
               : "opacity-0 scale-95 pointer-events-none"
@@ -157,7 +174,7 @@ const Header = () => {
                   key={item.label}
                   href={item.href}
                   className={cn(
-                    "text-sm font-medium tracking-wide transition-colors p-5 rounded-xl",
+                    "text-md font-medium tracking-wide transition-colors p-4 rounded-xl font-syne",
                     useLightHeaderText
                       ? "text-white/95 hover:text-foregroundText bg-background/5"
                       : "text-foregroundText/90 hover:text-foregroundText bg-background"
@@ -167,9 +184,6 @@ const Header = () => {
                   {item.label}
                 </a>
               ))}
-              {/* <Button className="mt-4" size="lg">
-                Book an Appointment
-              </Button> */}
           </div>
         </nav>
       </div>

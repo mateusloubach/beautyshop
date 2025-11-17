@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { encodeSans, lavishlyYours } from "@/lib/fonts";
+import { encodeSans, lavishlyYours, syne } from "@/lib/fonts";
 import "./globals.css";
 import Header from "@/components/shared/Header";
 import Footer from "@/components/shared/Footer";
@@ -15,11 +15,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${encodeSans.variable} ${lavishlyYours.variable} antialiased`}>
+    <html lang="en" className="light" style={{ colorScheme: 'light' }}>
+      <body className={`${encodeSans.variable} ${lavishlyYours.variable} ${syne.variable} antialiased`}>
         <div className="min-h-screen flex flex-col">
           <Header />
-          <main className={`${encodeSans.variable} ${lavishlyYours.variable} antialiased`}>
+          <main className={`${encodeSans.variable} ${lavishlyYours.variable} ${syne.variable} antialiased`}>
             {children}
           </main>
           <Footer />

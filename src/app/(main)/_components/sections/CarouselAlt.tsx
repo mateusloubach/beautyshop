@@ -46,7 +46,7 @@ const CardCarousel = () => {
         {/* CARDS */}
         <div className="mx-auto max-w-6xl">
           <p className="mb-4 text-2xl lg:text-4xl font-semibold text-[#4a3b39]">
-            Tratamentos, <span className="text-foregroundText">que atendem seus desejos.</span>
+            Tratamentos <span className="text-foregroundText">que atendem seus desejos.</span>
           </p>
           <motion.div
             animate={{
@@ -101,12 +101,12 @@ const Card = ({ url, category, title, description }: ItemType) => {
         backgroundSize: "cover",
       }}
     >
-      <div className="absolute inset-0 z-20 rounded-2xl bg-linear-to-b from-[#4a3b39] via-[#7A6458]/50 to-[#7A6458]/0 p-6 text-white transition-[backdrop-filter] hover:backdrop-blur-sm">
-        <span className="text-xs font-semibold uppercase text-[#C28C7C]">
+      <div className="absolute inset-0 z-20 rounded-2xl bg-linear-to-b from-[#4a3b39] via-[#7A6458]/50 to-[#7A6458]/0 p-6 text-white transition-[backdrop-filter] backdrop-blur-sm hover:backdrop-blur-none">
+        <span className="text-sm font-semibold uppercase text-[#C28C7C]">
           {category}
         </span>
         <p className="my-2 text-3xl font-bold">{title}</p>
-        <p className="text-lg text-white">{description}</p>
+        <p className="text-md font-extralight text-white">{description}</p>
       </div>
     </div>
   );
@@ -133,9 +133,9 @@ const items: ItemType[] = [
   },
   {
     id: 2,
-    url: "/imgs/computer/keyboard.png",
-    category: "Keyboards",
-    title: "Type in style",
+    url: "/images/cards/microblading-a.jpg",
+    category: "Tratamentos Faciais",
+    title: "Microdermoabrasão",
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, dolor.",
   },

@@ -7,7 +7,7 @@ const Footer = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mb-8">
           {/* Brand Section */}
           <div className="col-span-2">
-            <h3 className="text-2xl font-bold mb-4">CAROLBEAUTY</h3>
+            <h3 className="font-syne text-3xl font-bold mb-4">CAROLBEAUTY</h3>
             <p className="text-sm opacity-75">
               Premium beauty studio dedicated to enhancing your natural
               radiance.
@@ -17,7 +17,7 @@ const Footer = () => {
           {/* Quick Links */}
           <div>
             <h4 className="font-bold mb-4 uppercase">Quick Links</h4>
-            <ul className="text-sm flex flex-wrap items-center gap-x-6 gap-y-2 border-t pt-1">
+            <ul className="font-syne text-sm flex flex-wrap items-center gap-x-6 gap-y-2 border-t pt-1">
               <li>
                 <Link
                   href="/"
