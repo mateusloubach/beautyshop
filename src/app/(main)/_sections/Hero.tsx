@@ -31,7 +31,7 @@ const Hero = () => {
                 Cuidar de você é a nossa especialidade
               </p>
               <a
-                href="https://wa.me/5511942393021"
+                href="https://wa.me/351930472713"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block text-white uppercase text-sm md:text-2xl font-medium relative"

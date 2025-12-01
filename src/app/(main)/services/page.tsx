@@ -7,7 +7,7 @@ import { serviceTypes, getServicesByType } from "@/constants/useServices";
 import { motion } from "framer-motion";
 
 const ServicesSection = () => {
-  const whatsappLink = "https://wa.me/5511942393021";
+  const whatsappLink = "https://wa.me/351930472713";
 
   // Create URL-friendly slugs from service types
   const getServiceSlug = (type: string) => {

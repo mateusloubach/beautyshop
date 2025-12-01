@@ -162,7 +162,7 @@ const Header = () => {
             size="lg"
           >
             <a
-              href="https://wa.me/5511942393021"
+              href="https://wa.me/351930472713"
               target="_blank"
               rel="noopener noreferrer"
               className="font-syne"
