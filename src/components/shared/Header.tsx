@@ -16,16 +16,38 @@ import { cn } from "@/lib/utils";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+  const [pathname, setPathname] = useState<string>("/");
   const menuRef = useRef<HTMLElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const pathname = usePathname();
+  const actualPathname = usePathname();
+
+  // Prevent hydration mismatch by only using pathname after mount
+  useEffect(() => {
+    // Schedule updates asynchronously to avoid triggering cascading renders
+    const rafId =
+      typeof window !== "undefined"
+        ? requestAnimationFrame(() => {
+            setIsMounted(true);
+            setPathname(actualPathname);
+          })
+        : undefined;
+
+    return () => {
+      if (typeof window !== "undefined" && rafId !== undefined) {
+        cancelAnimationFrame(rafId);
+      }
+    };
+  }, [actualPathname]);
+
   const isHome = pathname === "/";
 
   // On home: transparent header until scroll.
   // On other routes: always use the "scrolled" (solid) style by default.
   // For non-home pages, always show solid header to prevent hydration mismatch
-  const showSolidHeader = !isHome || isScrolled;
-  const useLightHeaderText = isHome && !isScrolled;
+  // During SSR and initial render, default to solid header to prevent mismatch
+  const showSolidHeader = !isMounted || !isHome || isScrolled;
+  const useLightHeaderText = isMounted && isHome && !isScrolled;
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -79,8 +101,8 @@ const Header = () => {
   const navItems = [
     // { label: "INÍCIO", href: "/" },
     { label: "SERVIÇOS", href: "/services" },
-    { label: "SOBRE NÓS", href: "/about" },
-    { label: "GALERIA", href: "/galeria" },
+    { label: "SOBRE NÓS", href: "/about-us" },
+    { label: "GALERIA", href: "/gallery" },
   ];
 
   return (
@@ -99,11 +121,12 @@ const Header = () => {
           <Link
             href="/"
             className={cn(
-              "text-3xl font-bold tracking-tight transition-colors duration-300 font-syne",
+              "text-3xl font-bold uppercase tracking-tight transition-colors duration-300 font-syne",
               useLightHeaderText ? "text-white" : "text-[#4a3b39]"
             )}
           >
-            CAROLBEAUTY
+            <span className="md:hidden">Carol Beauty</span>
+            <span className="hidden md:inline">Carol Belmonte Beauty</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -138,10 +161,14 @@ const Header = () => {
             )}
             size="lg"
           >
-            <Link href={isHome ? "#contact" : "/"} className="font-syne">
-              {/* {isHome ? "Faça sua reserva agora" : "Voltar ao início"} */}
+            <a
+              href="https://wa.me/5511942393021"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-syne"
+            >
               Faça sua reserva agora
-            </Link>
+            </a>
           </Button>
 
           {/* Mobile Menu Button */}
@@ -162,28 +189,28 @@ const Header = () => {
         <nav
           ref={menuRef}
           className={cn(
-            "md:hidden absolute top-full right-0 mt-2 py-7 backdrop-blur-md p-4 border border-white/5 rounded-2xl transition-all duration-300 ease-in-out max-w-sm w-4/6 mx-1 shadow-2xl",
+            "md:hidden absolute top-full left-4 right-4 mt-2 py-4 backdrop-blur-lg bg-background/95 border border-border/50 rounded-xl transition-all duration-300 ease-in-out shadow-2xl z-50",
             isMenuOpen
-              ? "opacity-100 scale-100"
-              : "opacity-0 scale-95 pointer-events-none"
+              ? "opacity-100 scale-100 translate-y-0 visible"
+              : "opacity-0 scale-95 -translate-y-2 pointer-events-none invisible"
           )}
         >
-          <div className="flex flex-col gap-4">
-              {navItems.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className={cn(
-                    "text-md font-medium tracking-wide transition-colors p-4 rounded-xl font-syne",
-                    useLightHeaderText
-                      ? "text-white/95 hover:text-foregroundText bg-background/5"
-                      : "text-foregroundText/90 hover:text-foregroundText bg-background"
-                  )}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.label}
-                </a>
-              ))}
+          <div className="flex flex-col gap-2 px-2">
+            {navItems.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className={cn(
+                  "text-base font-medium tracking-wide transition-all duration-200 px-4 py-3 rounded-lg font-syne text-center",
+                  useLightHeaderText
+                    ? "text-black/95 bg-accent hover:text-foregroundText hover:bg-white/10 active:bg-white/20"
+                    : "text-foregroundText hover:bg-accent/50 active:bg-accent"
+                )}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {item.label}
+              </Link>
+            ))}
           </div>
         </nav>
       </div>

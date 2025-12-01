@@ -1,22 +1,31 @@
 import Link from "next/link";
+import { serviceTypes } from "@/constants/useServices";
 
 const Footer = () => {
+  // Create URL-friendly slugs from service types
+  const getServiceSlug = (type: string) => {
+    return type.toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "") // Remove accents
+      .replace(/\s+/g, "-"); // Replace spaces with hyphens
+  };
+
   return (
-    <footer className="bg-primary/95 text-primary-foreground py-12">
+    <footer className="bg-primary/95 text-primary-foreground pt-12 pb-5">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mb-8">
-          {/* Brand Section */}
           <div className="col-span-2">
-            <h3 className="font-syne text-3xl font-bold mb-4">CAROLBEAUTY</h3>
+            <h3 className="font-syne uppercase text-3xl font-bold mb-4">
+              <span className="md:hidden">Carol Beauty</span>
+              <span className="hidden md:inline">Carol Belmonte Beauty</span>
+            </h3>
             <p className="text-sm opacity-75">
-              Premium beauty studio dedicated to enhancing your natural
-              radiance.
+              Um estúdio de estética premium comprometido em elevar a sua beleza autêntica.
             </p>
           </div>
 
-          {/* Quick Links */}
           <div>
-            <h4 className="font-bold mb-4 uppercase">Quick Links</h4>
+            <h4 className="font-bold mb-4 uppercase">Acessos Rápidos</h4>
             <ul className="font-syne text-sm flex flex-wrap items-center gap-x-6 gap-y-2 border-t pt-1">
               <li>
                 <Link
@@ -28,10 +37,10 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="#services"
+                  href="/services"
                   className="opacity-75 hover:opacity-100 hover:text-[#f08080] transition-colors"
                 >
-                  Services
+                  Serviços
                 </Link>
               </li>
               <li>
@@ -39,34 +48,39 @@ const Footer = () => {
                   href="#contact"
                   className="opacity-75 hover:opacity-100 hover:text-[#f08080] transition-colors"
                 >
-                  Contact
+                  Contato
                 </Link>
               </li>
               <li>
                 <Link
-                  href="#about"
+                  href="/about-us"
                   className="opacity-75 hover:opacity-100 hover:text-[#f08080] transition-colors"
                 >
-                  About Us
+                  Sobre Nós
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Services */}
           <div>
-            <h4 className="font-bold mb-4 uppercase">Services</h4>
+            <h4 className="font-bold mb-4 uppercase">Serviços</h4>
             <ul className="text-sm flex flex-wrap items-center gap-x-6 gap-y-2 border-t pt-1">
-              <li className="opacity-75">Facial Treatments</li>
-              <li className="opacity-75">Body Treatments</li>
-              <li className="opacity-75">Hair Services</li>
-              <li className="opacity-75">Skincare</li>
+              {serviceTypes.map((type) => (
+                <li key={type}>
+                  <Link
+                    href={`/services#${getServiceSlug(type)}`}
+                    className="opacity-75 hover:opacity-100 hover:text-[#f08080] transition-colors"
+                  >
+                    {type}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Connect */}
           <div>
-            <h4 className="font-bold mb-4 uppercase">Connect</h4>
+            <h4 className="font-bold mb-4 uppercase">Conectar</h4>
             <ul className="text-sm flex flex-wrap items-center gap-x-6 gap-y-2 border-t pt-1">
               <li>
                 <a
@@ -103,10 +117,10 @@ const Footer = () => {
         </div>
 
         {/* Copyright */}
-        <div className="border-t border-primary-foreground/20 pt-8 text-center text-sm opacity-75">
+        <div className="text-right text-sm opacity-75">
           <p>
-            &copy; {new Date().getFullYear()} Carol Belmonte Beauty. All rights
-            reserved.
+            &copy; {new Date().getFullYear()} Carol Belmonte Beauty. 
+            <br className="md:hidden"/> All rights reserved.
           </p>
         </div>
       </div>

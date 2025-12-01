@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { bottombarLinks } from "@/constants/navigation";
+import { bottombarLinks } from "@/constants/useNavigation";
 
 const Bottombar = () => {
   const pathname = usePathname();
